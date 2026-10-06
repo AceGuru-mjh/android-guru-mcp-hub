@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// MCP 服务器（目录条目 + 已安装的集合，二合一）
+model McpServer {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String   @default("")
+  transport    String   @default("STDIO") // STDIO | HTTP | SSE
+  url          String?
+  command      String?
+  args         String   @default("[]") // JSON string[]
+  env          String   @default("{}") // JSON Record<string,string>
+  headers      String   @default("{}") // JSON Record<string,string>
+  apiKey       String?
+  enabled      Boolean  @default(false)
+  runInSandbox Boolean  @default(false)
+  scope        String   @default("all") // agent | coding | all
+  category     String   @default("programming") // programming | reverse
+  tags         String   @default("[]") // JSON string[]
+  vendor       String?
+  homepage     String?
+  source       String   @default("catalog") // catalog | import | manual
+  installed    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// 插件（Operit 结构 / Anthropic marketplace / Anthropic Agent Skill）
+model Plugin {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @default("")
+  version     String   @default("1.0.0")
+  author      String   @default("")
+  format      String   @default("operit") // operit | anthropic-marketplace | anthropic-skill
+  pluginType  String   @default("mcp") // mcp | script | toolpkg | skill
+  config      String   @default("{}") // 完整 JSON 配置（mcpServers / marketplace / skill 元数据）
+  skillBody   String?  // SKILL.md 正文（anthropic-skill 专用）
+  enabled     Boolean  @default(false)
+  installed   Boolean  @default(true)
+  sourceUrl   String?
+  repo        String? // operit: owner/repo
+  tags        String   @default("[]") // JSON string[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 导入日志
+model ImportLog {
+  id        String   @id @default(cuid())
+  kind      String   @default("mcp") // mcp | plugin
+  format    String   @default("") // 检测到的格式
+  total     Int      @default(0)
+  success   Int      @default(0)
+  failed    Int      @default(0)
+  errors    String   @default("[]") // JSON string[]
+  createdAt DateTime @default(now())
+}

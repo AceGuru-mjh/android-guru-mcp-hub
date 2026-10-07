@@ -172,3 +172,27 @@ Work Log:
 Stage Summary:
 - 全功能端到端验证通过：30 MCP 目录（16 编程 + 14 逆向）、多格式一键导入、4 格式导出下载、Operit/Anthropic 插件双生态、暗亮主题、响应式、粘性页脚
 - 项目达到可交付状态；测试数据已清理，用户首屏为纯净种子态
+
+---
+Task ID: 5
+Agent: main (Z.ai Code)
+Task: 交付推送 — 提交到用户 GitHub（Web 枢纽新仓库 + apex-mcp-hub 官方目录扩容）
+
+Work Log:
+- 新 token 验证：AceGuru-mjh 本人，classic PAT 含 repo 权限
+- 项目整理：README.md（完整中文文档）、docs/screenshots/ 4 张实测截图、.env.example、.gitignore 补全（db/*.db、沙箱基建）、package.json 更名 android-guru-mcp-hub v1.0.0；取消追踪 .env/.zscripts/Caddyfile/agent-ctx/examples/tests/download/db.custom.db；历史重写为单一干净提交
+- 创建并推送 https://github.com/AceGuru-mjh/android-guru-mcp-hub（commit 2f8f9e8，107 文件，API 验证 130 tree 项全在）
+- apex-mcp-hub 推送前的真实性核实（达到其 CI --online 标准）：
+  * GitHub API 逐一验证 16 个仓库存在与星数（serena 30k★/GhidraMCP 10.5k★/ida-pro-mcp 12.4k★/radare2-mcp 官方/jadx-apktool zinja-coder 套件/android minhalvp 810★/BurpMCP-Ultra 等）
+  * npm 注册表实测：frida-mcp/binary-ninja-mcp/@burtthecoder/mcp-shodan/typescript-mcp/docker-mcp/supergateway 全部 200
+  * PyPI 实测：ida-pro-mcp 1.4.0/serena-agent(oraios 官方)/mcp-nmap/zalaid 200；yaraflux 未发布 → 剔除官方目录（保留 Web 枢纽）
+  * 安装命令全部取自各仓库官方 README（r2pm -r r2mcp / python bridge_mcp_ghidra.py / uv --directory 系列 / supergateway SSE 桥接）
+- Web 枢纽 seed-data.ts 校准 16 个条目（jadx/apktool/shodan/nmap/burp/yara/capstone/volatility/binary-ninja/radare2/ghidra/ida-pro/frida/android/docker/typescript），DB 重灌 + API 复验 14 条逆向命令全部为实测形态，commit 8ca3ce8 推送
+- apex-mcp-hub v2.2.0：追加 14 台（1 devtools + 13 security），遵守其 18 类词表/name 正则/STDIO 无 url/enabled 恒 false/envSchema 规范；本地 build_index.py 重算 + validate.py + validate.py --online 三重全过；changelog v2.2.0 说明去重原则（9 台重名跳过 + filesystem/memory 沿用 v2.1 宿主预置去重）
+- 推送 apex-mcp-hub commit b58bf87（80→94 台，security 1→14，devtools 8→9）
+- GitHub Actions "Validate Registry" 两 job（Index Schema & Entries / Package & Endpoint Reachability）双 success；raw.githubusercontent.com 已生效 94 台 / 14 新条目全在线
+
+Stage Summary:
+- android-guru-mcp-hub 仓库：https://github.com/AceGuru-mjh/android-guru-mcp-hub（2 commits：2f8f9e8 + 8ca3ce8）
+- apex-mcp-hub 官方目录：v2.2.0 commit b58bf87，94 台，CI 双 job 绿，Android App 可直接拉取
+- 所有推送均以用户身份（AceGuru-mjh）提交；沙箱运行中的应用与仓库代码一致
